@@ -1,0 +1,6 @@
+{
+  "name": "Attendance Management System",
+  "description": "A comprehensive system for managing student attendance on a monthly basis. Features include class and student management, bulk CSV student upload, and detailed attendance tracking with summaries.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
