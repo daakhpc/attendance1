@@ -1,25 +1,26 @@
 
 import React, { useState } from 'react';
-import { Button, Input, Card } from '../components/common';
+import { Button, Input, Card, Spinner } from '../components/common';
 
 interface LoginProps {
-  onLogin: () => void;
+  onLogin: (email: string, password: string) => Promise<boolean>;
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('password');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple mock authentication
-    if (username === 'admin' && password === 'password') {
-      setError('');
-      onLogin();
-    } else {
-      setError('Invalid username or password. Use admin/password.');
+    setError('');
+    setIsLoading(true);
+    const success = await onLogin(email, password);
+    if (!success) {
+      setError('Invalid email or password.');
     }
+    setIsLoading(false);
   };
 
   return (
@@ -30,12 +31,13 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
             <Input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="admin"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="superadmin@app.com"
+              required
             />
           </div>
           <div className="mb-6">
@@ -44,11 +46,12 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="password"
+              placeholder="superpassword"
+              required
             />
           </div>
-          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-          <Button type="submit" className="w-full">
+          {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+          <Button type="submit" className="w-full" isLoading={isLoading}>
             Log In
           </Button>
         </form>

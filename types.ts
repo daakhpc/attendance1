@@ -5,7 +5,7 @@ export interface CollegeInfo {
 
 export interface ClassInfo {
   id: string;
-  name: string;
+  name:string;
 }
 
 export interface Student {
@@ -41,4 +41,77 @@ export interface Holiday {
   name: string;
 }
 
-export type ViewType = 'dashboard' | 'college' | 'classes' | 'students' | 'attendance' | 'holidays';
+export interface WorkableSunday {
+    id: string;
+    date: string; // YYYY-MM-DD
+}
+
+// --- Fee Management Types ---
+export interface FeeHead {
+    id: string;
+    name: string;
+}
+
+export interface ClassFee {
+    id: string;
+    classId: string;
+    feeHeadId: string;
+    amount: number;
+}
+
+export interface FeeConcession {
+    id: string;
+    studentId: string;
+    classFeeId: string; // Links to the specific fee assignment
+    concessionAmount: number;
+}
+
+export interface FeePayment {
+    id: string;
+    studentId: string;
+    classFeeId: string;
+    amountPaid: number;
+    paymentDate: string; // YYYY-MM-DD
+    remarks?: string;
+}
+
+// --- Day Book Types ---
+export interface OpeningBalance {
+    id: string; // YYYY-MM-DD
+    amount: number;
+    type: 'credit' | 'debit';
+}
+
+export interface Expenditure {
+    id: string;
+    date: string; // YYYY-MM-DD
+    description: string;
+    amount: number;
+}
+
+
+export type UserRole = 'superadmin' | 'admin';
+
+export interface User {
+  id: string;
+  email: string;
+  password: string;
+  role: UserRole;
+}
+
+export interface BackupData {
+    collegeInfo: CollegeInfo;
+    classes: ClassInfo[];
+    students: Student[];
+    holidays: Holiday[];
+    workableSundays: WorkableSunday[];
+    attendance: AttendanceData;
+    feeHeads: FeeHead[];
+    classFees: ClassFee[];
+    feePayments: FeePayment[];
+    feeConcessions: FeeConcession[];
+    openingBalances: OpeningBalance[];
+    expenditures: Expenditure[];
+}
+
+export type ViewType = 'dashboard' | 'college' | 'classes' | 'students' | 'attendance' | 'holidays' | 'users' | 'workableSundays' | 'fees' | 'backup' | 'daybook';
